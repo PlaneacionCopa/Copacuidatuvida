@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Panel de administración · Copa Cuida Tu Vida</title>
+  <meta name="theme-color" content="#21294c">
+  <link rel="icon" href="assets/favicon.png">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div id="demo" class="demo-banner hidden">Modo demostración: datos ficticios. Escribe cualquier usuario y contraseña para entrar.</div>
+  <header class="topbar">
+    <div class="wrap wrap-wide">
+      <a class="logo" href="index.html" aria-label="Alcaldía de Copacabana · Secretaría de Salud">
+        <img src="assets/escudo.png" alt="Escudo de Copacabana" width="38" height="50">
+        <span class="txt"><b>Alcaldía de<br>Copacabana</b><span>Secretaría de Salud</span></span>
+      </a>
+      <button class="btn peq sec hidden" id="btn-salir">Cerrar sesión</button>
+    </div>
+  </header>
+  <div class="franja"></div>
+
+  <!-- ================= LOGIN ================= -->
+  <main id="vista-login" class="wrap">
+    <section class="panel login">
+      <h2>Ingreso administradores</h2>
+      <p class="lead">Panel Copa Cuida Tu Vida · solo para el equipo organizador.</p>
+      <div id="login-error" class="alerta error hidden" role="alert"></div>
+      <form id="form-login">
+        <div class="campo"><label for="email">Usuario</label><input type="text" id="email" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="nombre.apellido" required></div>
+        <div class="campo"><label for="password">Contraseña</label><input type="password" id="password" autocomplete="current-password" required></div>
+        <button class="btn ancho" id="btn-login">Ingresar</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- ================= PANEL ================= -->
+  <main id="vista-panel" class="wrap wrap-wide hidden">
+    <div class="admin-head">
+      <div>
+        <span class="eyebrow">Copa Cuida Tu Vida</span>
+        <h1 id="titulo-evento">Indoor Cycling</h1>
+      </div>
+      <div class="tabs" role="tablist">
+        <button class="on" data-evento="cycling">Ciclismo</button>
+        <button data-evento="carrera">Carrera</button>
+      </div>
+    </div>
+
+    <div class="metricas">
+      <div class="metrica"><small>Inscritos (público)</small><b id="m-inscritos">—</b><div class="barra"><i id="m-barra" style="width:0"></i></div></div>
+      <div class="metrica"><small>Cupos disponibles</small><b id="m-quedan">—</b></div>
+      <div class="metrica"><small>Edad promedio</small><b id="m-edad">—</b></div>
+      <div class="metrica"><small>Correos de confirmación enviados</small><b id="m-correos">—</b></div>
+      <div class="metrica"><small>Última inscripción</small><b id="m-ultima" style="font-size:20px;padding-top:6px;white-space:normal">—</b></div>
+    </div>
+
+    <div class="control">
+      <div>
+        <b>Inscripciones abiertas</b>
+        <div style="font-size:14px;color:var(--muted)" id="estado-txt">—</div>
+        <div style="font-size:13px;color:var(--orange-ink);font-weight:600;margin-top:2px" id="m-reservados"></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><a class="btn peq sec hidden" id="btn-reservado" href="ciclismo.html?reservado=1">Inscribir cupo reservado</a><label class="switch"><input type="checkbox" id="sw-abierto"><span></span></label></div>
+    </div>
+
+    <div class="graficas">
+      <div class="grafica"><h3>Rango de edad</h3><div class="lienzo"><canvas id="g-edad"></canvas></div></div>
+      <div class="grafica"><h3>Inscripciones acumuladas en el tiempo</h3><div class="lienzo"><canvas id="g-tiempo"></canvas></div></div>
+      <div class="grafica alta"><h3>Barrio / Vereda</h3><div class="lienzo"><canvas id="g-barrio"></canvas></div></div>
+      <div class="grafica solo-carrera hidden"><h3>Distancia</h3><div class="lienzo"><canvas id="g-distancia"></canvas></div></div>
+      <div class="grafica solo-carrera hidden"><h3>Género</h3><div class="lienzo"><canvas id="g-genero"></canvas></div></div>
+      <div class="grafica"><h3>Talla de camiseta</h3><div class="lienzo"><canvas id="g-talla"></canvas></div></div>
+      <div class="grafica"><h3>Tipo de documento</h3><div class="lienzo"><canvas id="g-doc"></canvas></div></div>
+      <div class="grafica ancha"><h3>EPS</h3><div class="lienzo"><canvas id="g-eps"></canvas></div></div>
+    </div>
+
+    <div class="tabla-wrap">
+      <div class="tabla-tools">
+        <input type="search" id="buscar" placeholder="Buscar por nombre, documento, barrio, correo…">
+        <button class="btn peq" id="btn-excel">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+          Descargar Excel
+        </button>
+        <button class="btn peq sec" id="btn-correos">Reenviar correos pendientes</button>
+        <button class="btn peq sec" id="btn-refrescar">Actualizar</button>
+        <span style="font-size:13px;color:var(--muted)" id="conteo-tabla"></span>
+      </div>
+      <div class="tabla-scroll">
+        <table>
+          <thead><tr>
+            <th>Orden</th><th>Fecha</th><th>Nombre</th><th>Tipo doc.</th><th>Documento</th><th>Edad</th><th>Teléfono</th>
+            <th>Contacto emergencia</th><th>Tel. emergencia</th><th>Correo</th><th>Barrio/Vereda</th><th>EPS</th><th class="solo-carrera hidden">Género</th><th class="solo-carrera hidden">Distancia</th><th>Talla</th><th>Confirmación</th><th></th>
+          </tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script type="module" src="assets/admin.js"></script>
+</body>
+</html>

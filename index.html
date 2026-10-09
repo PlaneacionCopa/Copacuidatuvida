@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copa Cuida Tu Vida · Inscripciones · Alcaldía de Copacabana</title>
+  <meta name="description" content="Inscripciones a los eventos de la estrategia Copa Cuida Tu Vida de la Secretaría de Salud de Copacabana.">
+  <meta name="theme-color" content="#21294c">
+  <link rel="icon" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div id="demo" class="demo-banner hidden">Modo demostración: los datos son ficticios y nada se guarda.</div>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="logo" href="index.html" aria-label="Alcaldía de Copacabana · Secretaría de Salud">
+        <img src="assets/escudo.png" alt="Escudo de Copacabana" width="38" height="50">
+        <span class="txt"><b>Alcaldía de<br>Copacabana</b><span>Secretaría de Salud</span></span>
+      </a>
+      <div class="marca-evento">Copa Cuida Tu Vida<small>Inscripciones 2026</small></div>
+    </div>
+  </header>
+  <div class="franja"></div>
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="marco">
+        <div class="puntos" aria-hidden="true"><i></i><i></i><i></i></div>
+        <span class="eyebrow">Estrategia de la Secretaría de Salud</span>
+        <h1>Copa Cuida Tu Vida</h1>
+        <p>Actividad física, bienestar y salud mental para toda la comunidad de Copacabana. Elige tu evento e inscríbete gratis.</p>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <div class="eventos">
+      <a class="evento" id="card-cycling" href="ciclismo.html">
+        <div class="icono">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM12 17.5V14l-3-3 4-3 2 3h2"/></svg>
+        </div>
+        <span class="badge abierta" id="badge-cycling">Inscripciones abiertas</span>
+        <h2>Inscripción Indoor Cycling</h2>
+        <div class="meta">
+          <span>17 de octubre de 2026 · 5:30 p. m.</span>
+          <span>Unidad Deportiva IDEM · en alianza con Smartfit</span>
+          <span>Cupos limitados</span>
+        </div>
+        <div class="cta"><span id="cta-cycling">Inscribirme</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </a>
+
+      <a class="evento rosa" id="card-carrera" href="carrera.html">
+        <div class="icono">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="4" r="2"/><path d="M8 21l3-6 3 2v4M7 12l3-3 4 1 3 3h3M10 9l-1 6"/></svg>
+        </div>
+        <span class="badge cerrada" id="badge-carrera">Próximamente</span>
+        <h2>Inscripción Carrera Copa Modo Rosa</h2>
+        <div class="meta">
+          <span>18 de octubre de 2026 · 5K y 10K</span>
+          <span>Mes de la prevención del cáncer de mama y la salud mental</span>
+          <span>Cupos limitados</span>
+        </div>
+        <div class="cta"><span id="cta-carrera">Ver detalles</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </a>
+    </div>
+  </main>
+
+  <footer class="pie">
+    <img src="assets/escudo.png" alt="" width="35" height="46">
+    Alcaldía de Copacabana · Secretaría de Salud · Estrategia Copa Cuida Tu Vida
+  </footer>
+
+  <script type="module">
+    import { estadoEventos } from './assets/api.js';
+    import { MODO_DEMO } from './assets/config.js';
+    if (MODO_DEMO) document.getElementById('demo').classList.remove('hidden');
+
+    async function pintar() {
+      try {
+        const eventos = await estadoEventos();
+        for (const id of ['cycling', 'carrera']) {
+          const ev = eventos.find((e) => e.id === id);
+          if (!ev) continue;
+          const badge = document.getElementById('badge-' + id);
+          const cta = document.getElementById('cta-' + id);
+          if (ev.agotado) { badge.className = 'badge agotada'; badge.textContent = 'Cupos agotados'; cta.textContent = 'Ver detalles'; }
+          else if (!ev.abierto) { badge.className = 'badge cerrada'; badge.textContent = id === 'carrera' ? 'Próximamente' : 'Inscripciones cerradas'; cta.textContent = 'Ver detalles'; }
+          else { badge.className = 'badge abierta'; badge.textContent = 'Inscripciones abiertas'; cta.textContent = 'Inscribirme'; }
+        }
+      } catch { /* se mantiene el estado por defecto */ }
+    }
+    pintar();
+    setInterval(pintar, 60000);
+  </script>
+</body>
+</html>

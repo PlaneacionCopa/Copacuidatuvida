@@ -1,0 +1,4 @@
+# La función valida por su cuenta quién la llama (clave secreta de la base
+# de datos o sesión de administradora), por eso no exige JWT de Supabase.
+[functions.enviar-confirmacion]
+verify_jwt = false
