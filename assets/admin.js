@@ -4,14 +4,14 @@ import { MODO_DEMO, ADMIN_DOMINIO } from './config.js';
 const $ = (id) => document.getElementById(id);
 if (MODO_DEMO) $('demo').classList.remove('hidden');
 
-const NOMBRES = { cycling: 'Indoor Cycling', carrera: 'Carrera Copa Modo Rosa' };
-const PAGINAS = { cycling: 'ciclismo.html', carrera: 'carrera.html' };
+const NOMBRES = { insanity: 'Clase de Insanity', cycling: 'Indoor Cycling', carrera: 'Carrera Copa Modo Rosa' };
+const PAGINAS = { insanity: 'insanity.html', cycling: 'ciclismo.html', carrera: 'carrera.html' };
 const RANGOS = [[18, 25], [26, 35], [36, 45], [46, 55], [56, 65], [66, 120]];
 const rangoDe = (e) => { const r = RANGOS.find(([a, b]) => e >= a && e <= b); return r ? (r[1] > 100 ? `${r[0]}+` : `${r[0]}–${r[1]}`) : '—'; };
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fecha = (iso) => new Date(iso).toLocaleString('es-CO', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'America/Bogota' });
 
-let evento = 'cycling';
+let evento = 'insanity';
 let filas = [];
 let estado = null;
 const graficas = {};
@@ -85,6 +85,14 @@ function pintarMetricas() {
   $('m-reservados').textContent = reservados
     ? `Reservados: ${nRes} de ${reservados} usados (puestos ${rangos}) · el público se inscribe del ${resIni + 1} al ${total}`
     : '';
+  const limRes = estado?.limites_reservados || null;             // ej. { "5K": 50, "10K": 50 }
+  if (limRes) {
+    const porDist = Object.entries(limRes).map(([d, lim]) => {
+      const k = filas.filter((f) => esReservado(f) && f.distancia === d).length;
+      return `${d}: ${k} / ${lim}${k >= lim ? ' (completos)' : ''}`;
+    }).join(' · ');
+    $('m-reservados').textContent += ` · Reservados por distancia → ${porDist}`;
+  }
   $('btn-reservado').classList.toggle('hidden', !reservados);
   $('btn-reservado').textContent = nRes < reservados ? `Inscribir cupo reservado (${reservados - nRes} libres)` : 'Reservados completos';
   $('m-barra').style.width = (cupos ? Math.min(100, Math.round((n / cupos) * 100)) : 0) + '%';

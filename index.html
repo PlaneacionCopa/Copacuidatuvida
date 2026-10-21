@@ -36,6 +36,22 @@
 
   <main class="wrap">
     <div class="eventos">
+      <a class="evento" id="card-insanity" href="insanity.html">
+        <div class="icono">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>
+        </div>
+        <span class="badge cerrada" id="badge-insanity">Próximamente</span>
+        <h2>Inscripción Clase de Insanity</h2>
+        <div class="meta">
+          <span>Domingo 25 de octubre de 2026 · 8:00 a. m.</span>
+          <span>Unidad Deportiva IDEM · en alianza con Power Campus y Electrolife</span>
+          <span>Cupos limitados</span>
+        </div>
+        <div class="cta"><span id="cta-insanity">Ver detalles</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </a>
+
       <a class="evento" id="card-cycling" href="ciclismo.html">
         <div class="icono">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM12 17.5V14l-3-3 4-3 2 3h2"/></svg>
@@ -80,16 +96,16 @@
     import { MODO_DEMO } from './assets/config.js';
     if (MODO_DEMO) document.getElementById('demo').classList.remove('hidden');
 
-    async function pintar() {
+        async function pintar() {
       try {
         const eventos = await estadoEventos();
-        for (const id of ['cycling', 'carrera']) {
+        for (const id of ['insanity', 'cycling', 'carrera']) {
           const ev = eventos.find((e) => e.id === id);
           if (!ev) continue;
           const badge = document.getElementById('badge-' + id);
           const cta = document.getElementById('cta-' + id);
           if (ev.agotado) { badge.className = 'badge agotada'; badge.textContent = 'Cupos agotados'; cta.textContent = 'Ver detalles'; }
-          else if (!ev.abierto) { badge.className = 'badge cerrada'; badge.textContent = id === 'carrera' ? 'Próximamente' : 'Inscripciones cerradas'; cta.textContent = 'Ver detalles'; }
+          else if (!ev.abierto) { badge.className = 'badge cerrada'; badge.textContent = id === 'insanity' ? 'Próximamente' : 'Inscripciones cerradas'; cta.textContent = 'Ver detalles'; }
           else { badge.className = 'badge abierta'; badge.textContent = 'Inscripciones abiertas'; cta.textContent = 'Inscribirme'; }
         }
       } catch { /* se mantiene el estado por defecto */ }
